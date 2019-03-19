@@ -11,16 +11,18 @@ export default class Game extends React.Component {
 
     this.width = 80;
     this.height = 300;
+    this.speed = 1;
 
     this.state = {
       player: {
         x: 10,
-        y: 10
+        y: 100
       },
       enemies: [
-        { x: 50, y: 1, width: 20, height: 15, speed: 2 }
-        // { x: 1, y: 1, width: 20, height: 15, speed: 1 }
-      ]
+        { x: 50, y: 1, width: 20, height: 15 },
+        { x: 1, y: 1, width: 20, height: 15 }
+      ],
+      bombs: [{ x: 1, y: 90 }]
     };
   }
 
@@ -28,13 +30,14 @@ export default class Game extends React.Component {
     const framesPerSecond = 50;
     this.gameLoop = GameLoop.start(framesPerSecond, () => {
       const updatedEnemies = this.state.enemies.map(enemy => {
-        let speed = enemy.speed;
-        if (enemy.x + enemy.width > this.width || enemy.x <= 0) speed *= -1;
+        let speed = this.speed;
+        if (enemy.x + enemy.width > this.width || enemy.x <= 0)
+          speed = this.speed * -1;
         let x = enemy.x + speed;
-        return { ...enemy, x, speed };
+        return { ...enemy, x };
       });
 
-      //this.setState({ enemies: updatedEnemies });
+      this.setState({ enemies: updatedEnemies });
     });
   };
 
@@ -47,6 +50,7 @@ export default class Game extends React.Component {
             height="10"
             player={this.state.player}
             enemies={this.state.enemies}
+            bombs={this.state.bombs}
           />
         </svg>
       </div>

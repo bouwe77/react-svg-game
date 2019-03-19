@@ -11,6 +11,9 @@ export default class Map extends React.Component {
         {this.props.enemies.map(enemy => (
           <Enemy enemy={enemy} />
         ))}
+        {this.props.bombs.map(bomb => (
+          <Bomb bomb={bomb} />
+        ))}
 
         <Bomb />
         <Player player={this.props.player} />

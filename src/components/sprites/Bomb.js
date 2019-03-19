@@ -1,5 +1,7 @@
 import React from "react";
 
-const Bomb = props => <circle cx="50" cy="50" r="3" fill="red" />;
+const Bomb = props => (
+  <circle cx={props.bomb.x} cy={props.bomb.y} r="3" fill="red" />
+);
 
 export default Bomb;
