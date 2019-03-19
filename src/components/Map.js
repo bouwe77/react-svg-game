@@ -1,15 +1,19 @@
 import React from "react";
 
+import Player from "./sprites/Player";
+import Enemy from "./sprites/Enemy";
+import Bomb from "./sprites/Bomb";
+
 export default class Map extends React.Component {
   render() {
     return (
       <g fill="gray" stroke="none">
-        <rect
-          width={this.props.width}
-          height={this.props.height}
-          x={this.props.playerPosition.x}
-          y={this.props.playerPosition.y}
-        />
+        {this.props.enemies.map(enemy => (
+          <Enemy enemy={enemy} />
+        ))}
+
+        <Bomb />
+        <Player player={this.props.player} />
       </g>
     );
   }
