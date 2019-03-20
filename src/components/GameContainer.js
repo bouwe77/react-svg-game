@@ -13,12 +13,11 @@ export default class GameContainer extends React.Component {
 
     let speed = 1;
 
-    const playerWidth = 20;
     this.state = {
       player: {
         x: this.width / 2,
         y: 100,
-        width: playerWidth,
+        width: 20,
         height: 10
       },
       enemies: [{ x: 0, y: 1, width: 20, height: 10, speed }],
