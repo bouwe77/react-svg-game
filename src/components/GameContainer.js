@@ -30,9 +30,9 @@ export default class GameContainer extends React.Component {
     this.gameLoop = GameLoop.start(this.framesPerSecond, () => {
       const updatedEnemies = this.state.enemies.map(enemy => {
         let speed = enemy.speed;
-        if (enemy.x + enemy.width > this.width || enemy.x <= 0)
+        if (enemy.x + enemy.width > this.width || enemy.x < 0)
           speed = enemy.speed * -1;
-        let x = enemy.x + speed;
+        const x = enemy.x + speed;
         return { ...enemy, x, speed };
       });
 
