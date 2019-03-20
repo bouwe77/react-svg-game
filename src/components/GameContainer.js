@@ -1,13 +1,16 @@
 import React from "react";
 
 import Game from "./Game";
+import GameLoop from "./GameLoop";
 
 export default class GameContainer extends React.Component {
   constructor(props) {
     super(props);
 
+    this.framesPerSecond = 50;
     this.width = 80;
     this.height = 300;
+
     let speed = 1;
 
     const playerWidth = 20;
@@ -24,8 +27,7 @@ export default class GameContainer extends React.Component {
   }
 
   componentDidMount = () => {
-    const framesPerSecond = 50;
-    this.gameLoop = GameLoop.start(framesPerSecond, () => {
+    this.gameLoop = GameLoop.start(this.framesPerSecond, () => {
       const updatedEnemies = this.state.enemies.map(enemy => {
         let speed = enemy.speed;
         if (enemy.x + enemy.width > this.width || enemy.x <= 0)
