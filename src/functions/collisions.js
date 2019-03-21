@@ -1,4 +1,10 @@
-export const didBombHitTarget = (bomb, target) => {
+export const didBombHitTargets = (bomb, targets) => {
+  return targets.map(target => {
+    return { ...target, exploded: didBombHitTarget(bomb, target) };
+  });
+};
+
+const didBombHitTarget = (bomb, target) => {
   const bombCoordinates = [createCoordinateString(bomb.x, bomb.y)];
   const targetCoordinates = [createCoordinateString(target.x, target.y)];
 

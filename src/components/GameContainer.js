@@ -3,7 +3,7 @@ import React from "react";
 import Game from "./Game";
 import GameLoop from "./GameLoop";
 
-import { didCollide } from "../functions/collisions";
+import { didBombHitTargets } from "../functions/collisions";
 
 export default class GameContainer extends React.Component {
   constructor(props) {
@@ -13,8 +13,6 @@ export default class GameContainer extends React.Component {
     this.width = 80;
     this.height = 300;
 
-    let speed = 1;
-
     this.state = {
       player: {
         x: this.width / 2,
@@ -22,10 +20,12 @@ export default class GameContainer extends React.Component {
         width: 20,
         height: 10
       },
-      enemies: [{ x: this.width / 2, y: 1, width: 20, height: 10, speed }],
+      enemies: [this.createEnemy(this.width / 2, 1)],
       bombs: []
     };
   }
+
+  createEnemy = (x, y) => ({ x, y, width: 20, height: 10 });
 
   createPlayerBomb = () => ({
     x: this.state.player.x + this.state.player.width / 2,
@@ -52,7 +52,7 @@ export default class GameContainer extends React.Component {
       // this.setState({ enemies: updatedEnemies });
 
       // Determine new position of bombs
-      // or deactivate if it left the canvas.
+      // or deactivate it if it left the canvas.
       const updatedBombs = this.state.bombs.map(bomb => {
         if (bomb.y <= 0) return { ...bomb, active: false };
         return { ...bomb, y: bomb.y + bomb.speed };
@@ -60,9 +60,11 @@ export default class GameContainer extends React.Component {
 
       const activeBombs = updatedBombs.filter(bomb => bomb.active);
 
-      // Determine the bomb
+      // Determine the bomb hit anything.
+      // If so, the bomb is deactivaed and the object exploded.
+      //...
 
-      this.setState({ bombs: unexplodedBombs });
+      this.setState({ bombs: activeBombs });
     });
   };
 
