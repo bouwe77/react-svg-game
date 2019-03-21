@@ -3,6 +3,8 @@ import React from "react";
 import Game from "./Game";
 import GameLoop from "./GameLoop";
 
+import { didCollide } from "../functions/collisions";
+
 export default class GameContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -20,7 +22,7 @@ export default class GameContainer extends React.Component {
         width: 20,
         height: 10
       },
-      enemies: [{ x: 0, y: 1, width: 20, height: 10, speed }],
+      enemies: [{ x: this.width / 2, y: 1, width: 20, height: 10, speed }],
       bombs: []
     };
   }
@@ -28,8 +30,9 @@ export default class GameContainer extends React.Component {
   createPlayerBomb = () => ({
     x: this.state.player.x + this.state.player.width / 2,
     y: this.state.player.y - 5,
+    radius: 3,
     speed: -1,
-    exploded: false
+    active: true
   });
 
   playerShoots = () => {
@@ -39,22 +42,27 @@ export default class GameContainer extends React.Component {
 
   componentDidMount = () => {
     this.gameLoop = GameLoop.start(this.framesPerSecond, () => {
-      const updatedEnemies = this.state.enemies.map(enemy => {
-        let speed = enemy.speed;
-        if (enemy.x + enemy.width > this.width || enemy.x < 0)
-          speed = enemy.speed * -1;
-        const x = enemy.x + speed;
-        return { ...enemy, x, speed };
-      });
+      // const updatedEnemies = this.state.enemies.map(enemy => {
+      //   let speed = enemy.speed;
+      //   if (enemy.x + enemy.width > this.width || enemy.x < 0)
+      //     speed = enemy.speed * -1;
+      //   const x = enemy.x + speed;
+      //   return { ...enemy, x, speed };
+      // });
+      // this.setState({ enemies: updatedEnemies });
 
+      // Determine new position of bombs
+      // or deactivate if it left the canvas.
       const updatedBombs = this.state.bombs.map(bomb => {
-        if (bomb.y <= 0) return { ...bomb, exploded: true };
+        if (bomb.y <= 0) return { ...bomb, active: false };
         return { ...bomb, y: bomb.y + bomb.speed };
       });
 
-      const unexplodedBombs = updatedBombs.filter(bomb => !bomb.exploded);
+      const activeBombs = updatedBombs.filter(bomb => bomb.active);
 
-      this.setState({ enemies: updatedEnemies, bombs: unexplodedBombs });
+      // Determine the bomb
+
+      this.setState({ bombs: unexplodedBombs });
     });
   };
 
