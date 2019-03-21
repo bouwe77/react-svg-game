@@ -1,6 +1,7 @@
 import React from "react";
 
 import Map from "./Map";
+import Button from "./Button";
 
 export default class Game extends React.Component {
   render = () => {
@@ -13,6 +14,8 @@ export default class Game extends React.Component {
             bombs={this.props.bombs}
           />
         </svg>
+
+        <Button shoot={this.props.playerShoots} />
       </div>
     );
   };

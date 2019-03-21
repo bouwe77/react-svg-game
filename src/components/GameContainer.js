@@ -21,9 +21,21 @@ export default class GameContainer extends React.Component {
         height: 10
       },
       enemies: [{ x: 0, y: 1, width: 20, height: 10, speed }],
-      bombs: [{ x: 3, y: 90 }, { x: 13, y: 80 }]
+      bombs: []
     };
   }
+
+  createPlayerBomb = () => ({
+    x: this.state.player.x + this.state.player.width / 2,
+    y: this.state.player.y - 5,
+    speed: -1,
+    exploded: false
+  });
+
+  playerShoots = () => {
+    const bombs = [...this.state.bombs, this.createPlayerBomb()];
+    this.setState({ bombs });
+  };
 
   componentDidMount = () => {
     this.gameLoop = GameLoop.start(this.framesPerSecond, () => {
@@ -35,7 +47,14 @@ export default class GameContainer extends React.Component {
         return { ...enemy, x, speed };
       });
 
-      this.setState({ enemies: updatedEnemies });
+      const updatedBombs = this.state.bombs.map(bomb => {
+        if (bomb.y <= 0) return { ...bomb, exploded: true };
+        return { ...bomb, y: bomb.y + bomb.speed };
+      });
+
+      const unexplodedBombs = updatedBombs.filter(bomb => !bomb.exploded);
+
+      this.setState({ enemies: updatedEnemies, bombs: unexplodedBombs });
     });
   };
 
@@ -47,6 +66,7 @@ export default class GameContainer extends React.Component {
         player={this.state.player}
         enemies={this.state.enemies}
         bombs={this.state.bombs}
+        playerShoots={this.playerShoots}
       />
     );
   };
