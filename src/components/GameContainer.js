@@ -28,15 +28,13 @@ export default class GameContainer extends React.Component {
   };
 
   playerMoveLeft = () => {
-    const newX = this.state.player.x - 1;
-    console.log(newX);
-    this.setState({ ...this.state.player, x: newX });
+    const player = { ...this.state.player, x: this.state.player.x - 5 };
+    this.setState({ player });
   };
 
   playerMoveRight = () => {
-    const newX = this.state.player.x + 1;
-    console.log(newX);
-    this.setState({ ...this.state.player, x: newX });
+    const player = { ...this.state.player, x: this.state.player.x + 5 };
+    this.setState({ player });
   };
 
   componentDidMount = () => {
