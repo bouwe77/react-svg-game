@@ -6,7 +6,7 @@ const Player = props => (
     height={props.player.height}
     x={props.player.x}
     y={props.player.y}
-    fill="Black"
+    fill={props.player.color}
   />
 );
 

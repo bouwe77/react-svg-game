@@ -3,39 +3,55 @@ import React from "react";
 import Game from "./Game";
 import GameLoop from "./GameLoop";
 
-import {
-  createPlayer,
-  createEnemy,
-  createBomb,
-  spriteConstants
-} from "../functions/sprites";
+import { createPlayer, createEnemy, createBomb } from "../functions/sprites";
+
+import { game, sprites, DIRECTION } from "../functions/constants";
 
 export default class GameContainer extends React.Component {
   constructor(props) {
     super(props);
 
-    this.framesPerSecond = 50;
-    this.canvasWidth = 80;
-    this.canvasHeight = 300;
-
     this.state = {
-      player: createPlayer(
-        this.canvasWidth / 2,
-        100,
-        spriteConstants.playerWidth,
-        spriteConstants.playerHeight
-      ),
-      enemies: [
-        createEnemy(
-          this.canvasWidth / 2,
-          1,
-          spriteConstants.enemyWidth,
-          spriteConstants.enemyHeight
-        )
-      ],
+      player: this.createPlayer(),
+      enemies: [this.createEnemy()],
       bombs: []
     };
   }
+
+  createPlayer = () => {
+    const centerX = game.canvasWidth / 2;
+    const bottomY = game.canvasHeight - sprites.playerHeight;
+
+    return createPlayer(
+      centerX,
+      bottomY,
+      sprites.playerWidth,
+      sprites.playerHeight,
+      sprites.playerColor
+    );
+  };
+
+  createEnemy = () =>
+    createEnemy(
+      0,
+      0,
+      sprites.enemyWidth,
+      sprites.enemyHeight,
+      sprites.enemyColor,
+      DIRECTION.RIGHT
+    );
+
+  createPlayerBomb = () => {
+    const bombX = this.state.player.x + sprites.playerWidth / 2;
+    const bombY = this.state.player.y;
+    return createBomb(
+      bombX,
+      bombY,
+      sprites.bombRadius,
+      sprites.bombColor,
+      DIRECTION.UP
+    );
+  };
 
   playerShoots = () => {
     const bombs = [...this.state.bombs, this.createPlayerBomb()];
@@ -43,7 +59,7 @@ export default class GameContainer extends React.Component {
   };
 
   componentDidMount = () => {
-    this.gameLoop = GameLoop.start(this.framesPerSecond, () => {
+    this.gameLoop = GameLoop.start(game.framesPerSecond, () => {
       // const updatedEnemies = this.state.enemies.map(enemy => {
       //   let speed = enemy.speed;
       //   if (enemy.x + enemy.width > this.width || enemy.x < 0)
@@ -52,29 +68,22 @@ export default class GameContainer extends React.Component {
       //   return { ...enemy, x, speed };
       // });
       // this.setState({ enemies: updatedEnemies });
-
       // Determine new position of bombs
-      // or deactivate it if it left the canvas.
-      const updatedBombs = this.state.bombs.map(bomb => {
-        if (bomb.y <= 0) return { ...bomb, active: false };
-        return { ...bomb, y: bomb.y + bomb.speed };
-      });
-
-      const activeBombs = updatedBombs.filter(bomb => bomb.active);
-
-      // Determine the bomb hit anything.
-      // If so, the bomb is deactivaed and the object exploded.
-      //...
-
-      this.setState({ bombs: activeBombs });
+      // or explode it if it left the canvas.
+      // const updatedBombs = this.state.bombs.map(bomb => {
+      //   if (bomb.y <= 0) return { ...bomb, active: false };
+      //   return { ...bomb, y: bomb.y + bomb.speed };
+      // });
+      // const remainingBombs = updatedBombs.filter(bomb => !bomb.exploded);
+      // this.setState({ bombs: remainingBombs });
     });
   };
 
   render = () => {
     return (
       <Game
-        canvasWidth={this.canvasWidth}
-        canvasHeight={this.canvasHeight}
+        canvasWidth={game.canvasWidth}
+        canvasHeight={game.canvasHeight}
         player={this.state.player}
         enemies={this.state.enemies}
         bombs={this.state.bombs}

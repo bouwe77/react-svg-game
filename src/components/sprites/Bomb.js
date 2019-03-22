@@ -5,7 +5,7 @@ const Bomb = props => (
     cx={props.bomb.x}
     cy={props.bomb.y}
     r={props.bomb.radius}
-    fill="red"
+    fill={props.bomb.color}
   />
 );
 

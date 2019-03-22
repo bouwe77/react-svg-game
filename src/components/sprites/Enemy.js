@@ -6,7 +6,7 @@ const Enemy = props => (
     height={props.enemy.height}
     x={props.enemy.x}
     y={props.enemy.y}
-    fill="Blue"
+    fill={props.enemy.color}
   />
 );
 

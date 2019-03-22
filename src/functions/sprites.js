@@ -1,29 +1,24 @@
-export const spriteConstants = {
-  // player
-  playerWidth: 20,
-  playerHeight: 10,
+export const createPlayer = (x, y, width, height, color) =>
+  createRectangle(x, y, width, height, color);
 
-  // enemies
-  enemyWidth: 20,
-  enemyHeight: 10,
-  enemySpeed: 1,
-
-  // bombs
-  bombRadius: 3,
-  bombSpeed: 1
+export const createEnemy = (x, y, width, height, color, direction) => {
+  let enemy = createRectangle(x, y, width, height, color);
+  return { ...enemy, direction };
 };
 
-export const createPlayer = (x, y, width, height) =>
-  createRectangle(x, y, width, height);
-
-export const createEnemy = (x, y, width, height) =>
-  createRectangle(x, y, width, height);
-
-export const createBomb = (x, y, radius, direction) => {
-  let bomb = createCircle(x, y, radius);
-  return { ...bomb, direction, exploded: false };
+export const createBomb = (x, y, radius, color, direction) => {
+  let bomb = createCircle(x, y, radius, color);
+  return { ...bomb, direction };
 };
 
-const createRectangle = (x, y, width, height) => ({ x, y, width, height });
+const createRectangle = (x, y, width, height, color) => {
+  let sprite = createSprite(x, y, color);
+  return { ...sprite, width, height };
+};
 
-const createCircle = (x, y, radius) => ({ x, y, radius });
+const createCircle = (x, y, radius, color) => {
+  let sprite = createSprite(x, y, color);
+  return { ...sprite, radius };
+};
+
+const createSprite = (x, y, color) => ({ x, y, color, exploded: false });
