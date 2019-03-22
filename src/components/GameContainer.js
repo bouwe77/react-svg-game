@@ -3,37 +3,39 @@ import React from "react";
 import Game from "./Game";
 import GameLoop from "./GameLoop";
 
-import { didBombHitTargets } from "../functions/collisions";
+import {
+  createPlayer,
+  createEnemy,
+  createBomb,
+  spriteConstants
+} from "../functions/sprites";
 
 export default class GameContainer extends React.Component {
   constructor(props) {
     super(props);
 
     this.framesPerSecond = 50;
-    this.width = 80;
-    this.height = 300;
+    this.canvasWidth = 80;
+    this.canvasHeight = 300;
 
     this.state = {
-      player: {
-        x: this.width / 2,
-        y: 100,
-        width: 20,
-        height: 10
-      },
-      enemies: [this.createEnemy(this.width / 2, 1)],
+      player: createPlayer(
+        this.canvasWidth / 2,
+        100,
+        spriteConstants.playerWidth,
+        spriteConstants.playerHeight
+      ),
+      enemies: [
+        createEnemy(
+          this.canvasWidth / 2,
+          1,
+          spriteConstants.enemyWidth,
+          spriteConstants.enemyHeight
+        )
+      ],
       bombs: []
     };
   }
-
-  createEnemy = (x, y) => ({ x, y, width: 20, height: 10 });
-
-  createPlayerBomb = () => ({
-    x: this.state.player.x + this.state.player.width / 2,
-    y: this.state.player.y - 5,
-    radius: 3,
-    speed: -1,
-    active: true
-  });
 
   playerShoots = () => {
     const bombs = [...this.state.bombs, this.createPlayerBomb()];
@@ -71,8 +73,8 @@ export default class GameContainer extends React.Component {
   render = () => {
     return (
       <Game
-        width={this.width}
-        height={this.height}
+        canvasWidth={this.canvasWidth}
+        canvasHeight={this.canvasHeight}
         player={this.state.player}
         enemies={this.state.enemies}
         bombs={this.state.bombs}

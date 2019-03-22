@@ -7,7 +7,7 @@ export default class Game extends React.Component {
   render = () => {
     return (
       <div>
-        <svg width={this.props.width} height={this.props.height}>
+        <svg width={this.props.canvasWidth} height={this.props.canvasHeight}>
           <Map
             player={this.props.player}
             enemies={this.props.enemies}
