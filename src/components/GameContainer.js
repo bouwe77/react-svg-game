@@ -1,8 +1,8 @@
 import React from "react";
 
 import Game from "./Game";
-import GameLoop from "./GameLoop";
 
+import gameLoop from "../functions/gameLoop";
 import { game, DIRECTION } from "../functions/constants";
 import fac from "../functions/factory";
 
@@ -27,8 +27,20 @@ export default class GameContainer extends React.Component {
     this.setState({ bombs });
   };
 
+  playerMoveLeft = () => {
+    const newX = this.state.player.x - 1;
+    console.log(newX);
+    this.setState({ ...this.state.player, x: newX });
+  };
+
+  playerMoveRight = () => {
+    const newX = this.state.player.x + 1;
+    console.log(newX);
+    this.setState({ ...this.state.player, x: newX });
+  };
+
   componentDidMount = () => {
-    this.gameLoop = GameLoop.start(game.framesPerSecond, () => {
+    this.gameLoop = gameLoop.start(game.framesPerSecond, () => {
       // const updatedEnemies = this.state.enemies.map(enemy => {
       //   let speed = enemy.speed;
       //   if (enemy.x + enemy.width > this.width || enemy.x < 0)
@@ -57,6 +69,8 @@ export default class GameContainer extends React.Component {
         enemies={this.state.enemies}
         bombs={this.state.bombs}
         playerShoots={this.playerShoots}
+        playerMoveLeft={this.playerMoveLeft}
+        playerMoveRight={this.playerMoveRight}
       />
     );
   };

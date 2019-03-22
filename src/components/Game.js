@@ -1,7 +1,8 @@
 import React from "react";
 
 import Map from "./Map";
-import Button from "./Button";
+import ButtonShoot from "./ButtonShoot";
+import ButtonMove from "./ButtonMove";
 
 export default class Game extends React.Component {
   render = () => {
@@ -14,8 +15,11 @@ export default class Game extends React.Component {
             bombs={this.props.bombs}
           />
         </svg>
-
-        <Button shoot={this.props.playerShoots} />
+        <div>
+          <ButtonMove text="<<" move={this.props.playerMoveLeft} />
+          <ButtonShoot shoot={this.props.playerShoots} />
+          <ButtonMove text=">>" move={this.props.playerMoveRight} />
+        </div>
       </div>
     );
   };
